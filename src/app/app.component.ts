@@ -50,13 +50,18 @@ export class AppComponent implements OnInit {
   getEmployeeList(): void {
     this._empService.getEmployeeList().subscribe({
       next: (res: any) => {
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.updateDataSource(res);
       },
       error: console.log,
     });
   }
+  
+  updateDataSource(data: any): void {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
