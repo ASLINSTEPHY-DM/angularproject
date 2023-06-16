@@ -2,10 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EmpAddEditComponent } from './emp-add-edit/emp-add-edit.component';
 import { EmployeeService } from './services/employee.service';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
 
 @Component({
   selector: 'app-root',
@@ -13,9 +12,6 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
-    
-  
   title = 'crud-app';
   displayedColumns: string[] = [
     'id',
@@ -35,30 +31,24 @@ export class AppComponent implements OnInit {
     private _empService: EmployeeService,
   ) {}
 
-
- ngOnInit(): void {
-  
-  this.getEmployeeList();
-}
-  
+  ngOnInit(): void {
+    this.getEmployeeList();
+  }
   openAddEditEmpForm() {
-    const dialogRef = this._dialog.open(EmpAddEditComponent, {
-      data: {}  
-    });
-  
-    dialogRef.afterClosed().subscribe((val: any) => {
-      if (val === true) {  
-        this.getEmployeeList();
-      }
+    const dialogRef = this._dialog.open(EmpAddEditComponent);
+      dialogRef.afterClosed().subscribe({
+        next: (val) => {
+          if (val) {
+            this.getEmployeeList();
+          }
+        },
+      
     });
   }
-  
+    
 
-  getEmployeeList(pageEvent?: PageEvent) {
-    const pageIndex = pageEvent ? pageEvent.pageIndex : 0;
-    const pageSize = pageEvent ? pageEvent.pageSize : 10;
-  
-    this._empService.getEmployeeList(pageIndex, pageSize).subscribe({
+  getEmployeeList(): void {
+    this._empService.getEmployeeList().subscribe({
       next: (res: any) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
@@ -67,7 +57,6 @@ export class AppComponent implements OnInit {
       error: console.log,
     });
   }
-  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -93,13 +82,26 @@ export class AppComponent implements OnInit {
   
 
   openEditForm(data: any) {
-    this._dialog.open(EmpAddEditComponent, {
+    const dialogRef = this._dialog.open(EmpAddEditComponent, {
       data,
+    });
+
+    dialogRef.afterClosed().subscribe((val: any) => {
+      if (val) {
+        this.getEmployeeList();
+      }
     });
   }
 
   viewEmployee(row: any) {
-   
+    // Implement the logic to handle the view employee action
     console.log('View Employee:', row);
+  }
+
+  openEditEmpForm(data: any) {
+    this._dialog.open(EmpAddEditComponent,{
+      data,
+    });
+      
   }
 }

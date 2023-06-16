@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,26 +12,18 @@ export class EmployeeService {
   constructor(private http: HttpClient) {}
 
   addEmployee(employeeData: any): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`);
-    return this.http.post(`${this.apiUrl}`, employeeData, { headers });
+    return this.http.post(`${this.apiUrl}?access-token=${this.accessToken}`, employeeData);
   }
 
   updateEmployee(id: number, employeeData: any): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`);
-    return this.http.put(`${this.apiUrl}/${id}`, employeeData, { headers });
+    return this.http.put(`${this.apiUrl}/${id}?access-token=${this.accessToken}`, employeeData);
   }
 
-  getEmployeeList(pageIndex: number, pageSize: number): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`);
-    const params = new HttpParams()
-      .set('_page', pageIndex.toString())
-      .set('_limit', pageSize.toString());
-
-    return this.http.get(`${this.apiUrl}`, { headers, params });
+  getEmployeeList(): Observable<any> {
+    return this.http.get(`${this.apiUrl}?access-token=${this.accessToken}`);
   }
 
   deleteEmployee(id: number): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`);
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete(`${this.apiUrl}/${id}?access-token=${this.accessToken}`);
   }
 }
