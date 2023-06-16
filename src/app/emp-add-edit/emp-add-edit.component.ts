@@ -40,26 +40,19 @@ export class EmpAddEditComponent implements OnInit {
 
         this._empService.updateEmployee(this.data.id,formData).subscribe(
           (response: any) => {
-            // Handle the successful response from the API
             console.log('Employee detail updated!', response);
-  
-            // Fetch the updated list of users from the API
+
             this._empService.getEmployeeList().subscribe(
               (users: any[]) => {
-                // Update the table data source with the new list of users
                 this.dataSource.data = users;
-  
-                // Close the dialog
                 this._dialogRef.close(true);
               },
               (error: any) => {
-                // Handle the error response from the API
                 console.error('Failed to fetch users:', error);
               }
             );
           },
           (error: any) => {
-            // Handle the error response from the API
             console.error('Failed to add user:', error);
           }
         );
