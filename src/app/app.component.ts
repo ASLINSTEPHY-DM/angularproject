@@ -94,7 +94,6 @@ export class AppComponent implements OnInit {
   }
 
   viewEmployee(row: any) {
-    // Implement the logic to handle the view employee action
     console.log('View Employee:', row);
   }
 
